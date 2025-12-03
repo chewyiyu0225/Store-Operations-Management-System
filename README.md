@@ -1,5 +1,6 @@
 # Store-Operations-Management-System
 Group name: 1+1=3
+
 Group member: 
 1. Chew Yi Yu 25005682
 2. Lee Jarrell 25005639
