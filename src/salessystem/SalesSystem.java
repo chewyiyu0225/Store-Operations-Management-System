@@ -239,7 +239,6 @@ public class SalesSystem {
             receipt.write("Items: " + items + "\n");
             receipt.write("Total: RM" + (int)total + "\n");
             receipt.write("Method: " + method + "\n");
-            receipt.write("Served by: " + staffName + "\n"); // <--- ADDED to receipt
             receipt.write("Status: Paid\n");
             receipt.write("--------------------------------\n\n");
             receipt.close();
@@ -293,7 +292,7 @@ public class SalesSystem {
         }
     }
     
-    // --- NEW: AUTO-CREATE EMPLOYEE FILE (For testing) ---
+    // --- NEW: AUTO-CREATE EMPLOYEE FILE ---
     static void createEmployeeFile() {
         File f = new File("employees.txt");
         if (!f.exists()) {
