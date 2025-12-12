@@ -1,17 +1,13 @@
 EmployeeID,EmployeeName,Role,Password,OutletCode
-C0221,Alice,Part-time,0122918012,C68
-972763,Jessica,Full Time,67dhej1,C60
-C6004,Wong Benedict,Part-time,j9k0l1,C61
-C6003,Jinu Saja,Part-time,g6h7i8,C61
-C6006,Adriana Nur Zahra binti Helmi,Part-time,p5q6r7,C62
-C6005,Dhaarane,Full-time,m2n3o4,C62
-C6008,Li Xinyi,Full-time,v1w2x3,C63
-C6007,Kang Rumi,Full-time,s8t9u0,C63
-C6009,Megan Mei,Part-time,y4z5a6,C64
-C6011,Jarjit Singh,Part-time,e0f1g2,C66
-v1w2x3,Li Xinyi,Full time,sdjnse,C60
-C6010,Aminah binti Said,Full-time,b7c8d9,C65
-C6002,Adam bin Abu,Full-time,d3e4f5,C60
-C6013,Siti Ros binti Rossi,Part-time,k617m8,C68
 C6001,Tan Guan Han,Manager,a2b1c0,C60
+C6002,Adam bin Abu,Full-time,d3e4f5,C60
+C6003,Jinu Saja,Part-time,g6h7i8,C61
+C6004,Wong Benedict,Part-time,j9k0l1,C61
+C6005,Dhaarane,Full-time,m2n3o4,C62
+C6006,Adriana Nur Zahra binti Helmi,Part-time,p5q6r7,C62
+C6007,Kang Rumi,Full-time,s8t9u0,C63
+C6008,Li Xinyi,Full-time,v1w2x3,C63
+C6009,Megan Mei,Part-time,y4z5a6,C64
+C6010,Aminah binti Said,Full-time,b7c8d9,C65
+C6011,Jarjit Singh,Part-time,e0f1g2,C66
 C6012,Khairul Ariffin bin Muhammad,Part-time,h3i4j5,C67
