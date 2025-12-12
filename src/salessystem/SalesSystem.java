@@ -8,7 +8,7 @@ import java.util.*;
 
 public class SalesSystem {
 
-    // --- COLORS FOR TEXT (To match the screenshots) ---
+    // --- COLORS FOR TEXT
     static final String RESET = "\u001B[0m";
     static final String GREEN = "\u001B[32m";
     static final String CYAN = "\u001B[36m";
