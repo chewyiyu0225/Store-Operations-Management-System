@@ -59,10 +59,10 @@ public class StockManager {
                     System.err.println("Error parsing number (price or stock) in line: " + line);
                 }
             }
-            System.out.println("✅ Inventory loaded successfully: " + inventory.size() + " models.");
+            System.out.println("[OK] Inventory loaded successfully: " + inventory.size() + " models.");
 
         } catch (IOException e) {
-            System.err.println("❌ ERROR: Could not read CSV file. Check if 'model.csv' is in the project root.");
+            System.err.println("[ERROR] Could not read CSV file. Check if 'model.csv' is in the project root.");
         }
     }
 
@@ -109,7 +109,7 @@ public class StockManager {
         }
         
         if (foundModel != null) {
-            System.out.println("\n✅ Model Found:");
+            System.out.println("\n[FOUND] Model:");
             System.out.println("----------------------------------");
             System.out.println("Model: " + foundModel.getModel());
             System.out.println("Price: RM " + String.format("%.2f", foundModel.getPrice()));
@@ -124,7 +124,7 @@ public class StockManager {
             System.out.println("\n----------------------------------");
             
         } else {
-            System.out.println("❌ Model '" + searchKey + "' not found.");
+                System.out.println("[NOT FOUND] Model '" + searchKey + "'.");
         }
     }
     
@@ -145,7 +145,7 @@ public class StockManager {
         }
 
         if (foundModel == null) {
-            System.out.println("❌ Model '" + searchKey + "' not found. Update failed.");
+            System.out.println("[ERROR] Model '" + searchKey + "' not found. Update failed.");
             return;
         }
         
@@ -161,7 +161,7 @@ public class StockManager {
             int locationChoice = Integer.parseInt(scanner.nextLine().trim());
             
             if (locationChoice < 1 || locationChoice > 10) {
-                System.out.println("❌ Invalid location number. Must be between 1 and 10.");
+                System.out.println("[ERROR] Invalid location number. Must be between 1 and 10.");
                 return;
             }
             
@@ -169,7 +169,7 @@ public class StockManager {
             int newQuantity = Integer.parseInt(scanner.nextLine().trim());
             
             if (newQuantity < 0) {
-                System.out.println("❌ Stock quantity cannot be negative.");
+                System.out.println("[ERROR] Stock quantity cannot be negative.");
                 return;
             }
             
@@ -183,7 +183,7 @@ public class StockManager {
             
         } catch (NumberFormatException e) {
             // Error Handling prerequisite fulfilled
-            System.out.println("❌ Invalid input. Please enter a number for choice/quantity.");
+            System.out.println("[ERROR] Invalid input. Please enter a number for choice/quantity.");
         }
     }
 }
