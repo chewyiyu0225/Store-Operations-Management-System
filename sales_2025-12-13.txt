@@ -1,0 +1,10 @@
+=== Receipt ===
+Date: 2025-12-13  Time: 12:24 a.m.
+Customer: chew
+Items: SW2500-1 Quantity: 1
+Total: RM845
+Method: Credit card
+Served by: Tan Guan Han
+Status: Paid
+--------------------------------
+

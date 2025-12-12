@@ -8,13 +8,16 @@ import java.util.*;
 
 public class SalesSystem {
 
-    // --- COLORS FOR TEXT (To match the screenshots) ---
+    // --- COLORS FOR TEXT
     static final String RESET = "\u001B[0m";
     static final String GREEN = "\u001B[32m";
     static final String CYAN = "\u001B[36m";
+    static final String RED = "\u001B[31m";
 
     // --- GLOBAL VARIABLES ---
     static ArrayList<Watch> inventory = new ArrayList<>();
+    static ArrayList<Employee> staffList = new ArrayList<>(); // <--- NEW: List of employees
+    static Employee currentUser = null;                       // <--- NEW: Stores who is logged in
     static Scanner input = new Scanner(System.in);
     
     // Outlet Names (C60-C69)
@@ -25,11 +28,17 @@ public class SalesSystem {
 
     // --- MAIN METHOD ---
     public static void main(String[] args) {
-        createDatabaseFile(); // Auto-create watches.txt
-        loadWatches();        // Load data
+        createDatabaseFile();   // Auto-create watches.txt
+        createEmployeeFile();   // <--- NEW: Auto-create employees.txt if missing
+        loadWatches();          // Load watch data
+        loadEmployees();        // <--- NEW: Load employee data
+
+        performLogin();         // <--- NEW: Force login before menu
 
         while (true) {
+            // Display User Info in Menu
             System.out.println("\n=== GOLDEN HOUR MENU ===");
+            System.out.println("User: " + CYAN + currentUser.name + RESET + " (" + currentUser.role + ")");
             System.out.println("1. Sales System");
             System.out.println("2. Search Information");
             System.out.println("3. Exit");
@@ -51,12 +60,12 @@ public class SalesSystem {
     }
 
     // ==========================================
-    // MODULE 1: SALES SYSTEM [cite: 353]
+    // MODULE 1: SALES SYSTEM
     // ==========================================
     public static void runSalesSystem() {
         System.out.println("\n=== Record New Sale ===");
         
-        // 1. Date & Time Format (e.g. 02:50 p.m.) [cite: 355]
+        // 1. Date & Time Format (e.g. 02:50 p.m.)
         String date = LocalDate.now().toString();
         String timeRaw = LocalTime.now().format(DateTimeFormatter.ofPattern("hh:mm a"));
         String time = timeRaw.toLowerCase().replace("am", "a.m.").replace("pm", "p.m.");
@@ -89,7 +98,7 @@ public class SalesSystem {
                     if (qty <= currentStock && qty > 0) {
                         System.out.println("Unit Price: RM" + (int)w.price);
                         
-                        // Update Logic [cite: 361]
+                        // Update Logic
                         w.stock[0] -= qty;
                         double lineTotal = w.price * qty;
                         subtotal += lineTotal;
@@ -123,18 +132,19 @@ public class SalesSystem {
             System.out.println("Subtotal: RM" + (int)subtotal);
             System.out.println(); // Blank line
 
-            // Success Messages (GREEN COLOR to match screenshot) [cite: 374-377]
+            // Success Messages (GREEN COLOR to match screenshot)
             System.out.println("Transaction " + GREEN + "successful." + RESET);
             System.out.println("Sale recorded " + GREEN + "successfully." + RESET);
             System.out.println("Model quantities updated " + GREEN + "successfully." + RESET);
             System.out.println("Receipt generated: sales_" + date + ".txt");
             
-            saveTransaction(date, time, customer, itemsLog.toString(), subtotal, method);
+            // <--- CHANGED: Now passing currentUser.name to the save function
+            saveTransaction(date, time, customer, itemsLog.toString(), subtotal, method, currentUser.name);
         }
     }
 
     // ==========================================
-    // MODULE 2: SEARCH INFORMATION [cite: 379]
+    // MODULE 2: SEARCH INFORMATION
     // ==========================================
     static void runSearchInfo() {
         System.out.println("\n=== Search Stock Information ==="); 
@@ -144,7 +154,7 @@ public class SalesSystem {
         int type = input.nextInt(); input.nextLine();
 
         if (type == 1) {
-            // --- SEARCH STOCK [cite: 381] ---
+            // --- SEARCH STOCK ---
             System.out.println("\n=== Search Stock Information ===");
             System.out.print("Search Model Name: ");
             String name = input.nextLine();
@@ -170,7 +180,7 @@ public class SalesSystem {
             } else System.out.println("Model not found.");
 
         } else if (type == 2) {
-            // --- SEARCH SALES [cite: 383] ---
+            // --- SEARCH SALES ---
             System.out.println("\n=== Search Sales Information ===");
             System.out.print("Search keyword: ");
             String key = input.nextLine();
@@ -181,7 +191,7 @@ public class SalesSystem {
                 Scanner file = new Scanner(new File("sales_db.txt"));
                 while (file.hasNextLine()) {
                     String line = file.nextLine();
-                    // Database format: Date|Time|Customer|Items|Total|Method
+                    // Database format: Date|Time|Customer|Items|Total|Method|EmployeeName
                     if (line.toLowerCase().contains(key.toLowerCase())) {
                         String[] parts = line.split("\\|"); 
                         if (parts.length >= 6) {
@@ -189,14 +199,16 @@ public class SalesSystem {
                             System.out.println("Date: " + parts[0].trim() + "\t\tTime: " + parts[1].trim());
                             System.out.println("Customer: " + parts[2].trim());
                             
-                            // Formatting Items to match screenshot "Item(s): SW2500-1  Quantity: 1"
                             String itemsRaw = parts[3].trim(); 
-                            // This replaces the comma logic from sales system to look nicer
                             System.out.println("Item(s): " + itemsRaw); 
                             
                             System.out.println("Total: " + parts[4].trim());
                             System.out.println("Transaction Method: " + parts[5].trim());
-                            System.out.println("Employee: Tan Guan Han"); // Hardcoded as per assignment
+                            
+                            // <--- CHANGED: Read employee name from file if it exists
+                            String emp = (parts.length > 6) ? parts[6].trim() : "Unknown";
+                            System.out.println("Employee: " + emp); 
+                            
                             System.out.println("Status: Transaction verified.");
                             System.out.println("------------------------------------------------");
                             found = true;
@@ -212,11 +224,12 @@ public class SalesSystem {
     // HELPER METHODS
     // ==========================================
 
-    static void saveTransaction(String date, String time, String cust, String items, double total, String method) {
+    // <--- CHANGED: Added staffName parameter
+    static void saveTransaction(String date, String time, String cust, String items, double total, String method, String staffName) {
         try {
             FileWriter db = new FileWriter("sales_db.txt", true);
-            // Save with delimiters | for easy reading
-            db.write(date + "|" + time + "|" + cust + "|" + items + "|RM" + (int)total + "|" + method + "\n");
+            // Save with delimiters | for easy reading. ADDED staffName at the end.
+            db.write(date + "|" + time + "|" + cust + "|" + items + "|RM" + (int)total + "|" + method + "|" + staffName + "\n");
             db.close();
             
             FileWriter receipt = new FileWriter("sales_" + date + ".txt", true);
@@ -226,6 +239,7 @@ public class SalesSystem {
             receipt.write("Items: " + items + "\n");
             receipt.write("Total: RM" + (int)total + "\n");
             receipt.write("Method: " + method + "\n");
+            receipt.write("Served by: " + staffName + "\n"); // <--- ADDED to receipt
             receipt.write("Status: Paid\n");
             receipt.write("--------------------------------\n\n");
             receipt.close();
@@ -234,6 +248,74 @@ public class SalesSystem {
         }
     }
     
+    // --- NEW: LOGIN METHOD ---
+    static void performLogin() {
+        while (true) {
+            System.out.println("\n=== SYSTEM LOGIN ===");
+            System.out.print("Enter Employee ID: ");
+            String id = input.nextLine();
+            System.out.print("Enter Password: ");
+            String pass = input.nextLine();
+
+            boolean found = false;
+            for (Employee e : staffList) {
+                if (e.id.equalsIgnoreCase(id) && e.password.equals(pass)) {
+                    currentUser = e; // Set global user
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                System.out.println(GREEN + "Login Successful! Welcome, " + currentUser.name + RESET);
+                break;
+            } else {
+                System.out.println(RED + "Invalid ID or Password. Please try again." + RESET);
+            }
+        }
+    }
+
+    // --- NEW: LOAD EMPLOYEES ---
+    static void loadEmployees() {
+        try {
+            Scanner file = new Scanner(new File("employees.txt"));
+            while (file.hasNextLine()) {
+                String line = file.nextLine();
+                if (line.trim().isEmpty()) continue;
+                String[] parts = line.split(",");
+                // Expecting: ID, Name, Role, Password
+                if (parts.length >= 4) {
+                    staffList.add(new Employee(parts[0].trim(), parts[1].trim(), parts[2].trim(), parts[3].trim()));
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Error: employees.txt not found.");
+        }
+    }
+    
+    // --- NEW: AUTO-CREATE EMPLOYEE FILE (For testing) ---
+    static void createEmployeeFile() {
+        File f = new File("employees.txt");
+        if (!f.exists()) {
+            try {
+                FileWriter fw = new FileWriter(f);
+                fw.write("C6001,Tan Guan Han,Manager,a2b1c0\n");
+                fw.write("C6002,Adam bin Abu,Full-time,d3e4f5\n");
+                fw.write("C6003,Jinu Saja,Part-time,g6h7i8\n");
+                fw.write("C6004,Wong Benedict,Part-time,j9k0l1\n");
+                fw.write("C6005,Dhaarane,Full-time,m2n3o4\n");
+                fw.write("C6006,Adriana Nur Zahra binti Helmi,Part-time,p5q6r7\n");
+                fw.write("C6007,Kang Rumi,Full-time,s8t9u0\n");
+                fw.write("C6008,Li Xinyi,Full-time,v1w2x3\n");
+                fw.write("C6009,Megan Mei,Part-time,y4z5a6\n");
+                fw.write("C6010,Aminah binti Said,Full-time,b7c8d9\n");
+                fw.write("C6011,Jarjit Singh,Part-time,e0f1g2\n");
+                fw.write("C6012,Khairul Ariffin bin Muhammad,Part-time,h3i4j5\n");
+                fw.close();
+            } catch (IOException e) { }
+        }
+    }
+
     static void createDatabaseFile() {
         File f = new File("watches.txt");
         if (!f.exists()) {
@@ -269,8 +351,17 @@ public class SalesSystem {
         return null;
     }
 
+    // --- CLASSES ---
     static class Watch {
         String name; double price; int[] stock;
         public Watch(String n, double p, int[] s) { name = n; price = p; stock = s; }
+    }
+    
+    // --- NEW CLASS: EMPLOYEE ---
+    static class Employee {
+        String id, name, role, password;
+        public Employee(String id, String name, String role, String pass) {
+            this.id = id; this.name = name; this.role = role; this.password = pass;
+        }
     }
 }
