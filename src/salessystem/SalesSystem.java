@@ -8,7 +8,7 @@ import java.util.*;
 
 public class SalesSystem {
 
-    // --- COLORS FOR TEXT
+    // --- COLORS FOR TEXT (To match the screenshots) ---
     static final String RESET = "\u001B[0m";
     static final String GREEN = "\u001B[32m";
     static final String CYAN = "\u001B[36m";
@@ -240,8 +240,6 @@ public class SalesSystem {
             try {
                 FileWriter fw = new FileWriter(f);
                 fw.write("Model,Price,C60,C61,C62,C63,C64,C65,C66,C67,C68,C69\n");
-                // Adding data that matches the Search screenshot (DW2300-4)
-                // C60=1, C61=1, C62=0, C63=0, C64=3, C65=1, C66=2, C67=2, C68=0, C69=1
                 fw.write("DW2300-4,349,1,1,0,0,3,1,2,2,0,1\n");
                 fw.write("SW2500-1,845,4,3,4,2,2,3,2,5,1,1\n");
                 fw.close();
