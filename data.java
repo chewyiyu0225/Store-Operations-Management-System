@@ -19,9 +19,9 @@ public class data{
         File file = new File(FILE_MODELS);
         if (!file.exists()) return list;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (Scanner sc = new Scanner(new FileInputStream(file))) {
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = sc.nextLine()) != null) {
                 String[] data = line.split(",");
                 if (data.length >= 3) { // Validation
                     list.add(new WatchModel(data[0].trim(), Double.parseDouble(data[1].trim()), Integer.parseInt(data[2].trim())));
@@ -36,13 +36,12 @@ public class data{
         File file = new File(FILE_SALES);
         if (!file.exists()) return list;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (Scanner sc = new Scanner(new FileInputStream(file))) {
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = sc.nextLine()) != null) {
                 String[] data = line.split(",");
                 if (data.length >= 8) { // Validation
-                    list.add(new SaleRecord(data[0], data[1], data[2], data[3], 
-                             Integer.parseInt(data[4]), Double.parseDouble(data[5]), data[6], data[7]));
+                    list.add(new SaleRecord(data[0], data[1], data[2], data[3], Integer.parseInt(data[4]), Double.parseDouble(data[5]), data[6], data[7]));
                 }
             }
         } catch (Exception e) { System.out.println("Error loading sales: " + e.getMessage()); }
@@ -54,9 +53,9 @@ public class data{
         File file = new File(FILE_EMPLOYEES);
         if (!file.exists()) return list;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (Scanner sc = new Scanner(new FileInputStream(file))) {
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = sc.readLine()) != null) {
                 String[] data = line.split(",");
                 if (data.length >= 4) { // Validation
                     list.add(new Employee(data[0].trim(), data[1].trim(),data[2].trim(),data[3].trim()));
@@ -71,9 +70,9 @@ public class data{
         File file = new File(FILE_ATTENDANCE);
         if (!file.exists()) return list;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+        try (Scanner sc = new Scanner(new FileInputStream(file))) {
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = sc.readLine()) != null) {
                 String[] data = line.split(",");
                 if (data.length >= 4) { // Validation
                     list.add(new AttendanceLog(data[0].trim(), data[1].trim(),data[2].trim(),data[3].trim()));
@@ -86,7 +85,7 @@ public class data{
    // --- STORAGE SYSTEM IMPLEMENTATION ---
 
     public static void saveModels(List<WatchModel> list) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_MODELS))) {
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(FILE_MODELS))) {
             for (WatchModel m : list) {
                 pw.println(m.toCSV()); // Converts object back to String format
             }
@@ -97,7 +96,7 @@ public class data{
     }
 
     public static void saveSales(List<SaleRecord> list) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_SALES))) {
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(FILE_SALES))) {
             for (SaleRecord s : list) {
                 pw.println(s.toCSV());
             }
@@ -108,7 +107,7 @@ public class data{
     }
     
     public static void saveEmployee(List<Employee> list) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_EMPLOYEES))) {
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(FILE_EMPLOYEES))) {
             for (Employee m : list) {
                 pw.println(m.toCSV()); // Converts object back to String format
             }
@@ -119,7 +118,7 @@ public class data{
     }
     
     public static void saveAttendance(List<AttendanceLog> list) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_ATTENDANCE))) {
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(FILE_ATTENDANCE))) {
             for (AttendanceLog m : list) {
                 pw.println(m.toCSV()); // Converts object back to String format
             }
@@ -128,5 +127,6 @@ public class data{
             System.out.println("Error saving models: " + e.getMessage()); 
         }
     }
+
 
     }
