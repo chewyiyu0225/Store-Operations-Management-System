@@ -55,18 +55,22 @@ class edit_information {
     // Requirement: Edit Stock-related data 
     public static void editStock() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter Model Name to Edit: ");
+        System.out.println("=== Edit Stock Information ===");
+        System.out.print("Enter Model Name: ");
+        System.out.println();
         String name = sc.nextLine();
 
         // Search Mechanism
         for (WatchModel m : stockList) {
             if (m.getModelName().equalsIgnoreCase(name)) {
-                System.out.println("Current: " + m);
-                System.out.print("Enter New Stock Quantity: ");
+                System.out.println("Current Stock: " + m);
+                System.out.print("Enter New Stock Value: ");
                 int newQty = sc.nextInt();
                 
                 // Modify Object
                 m.setQuantity(newQty);
+                
+                System.out.print("Stock Information updated successfully.");
                 
                 // STORAGE SYSTEM CALL 
                 data.saveModels(stockList); 
@@ -78,13 +82,11 @@ class edit_information {
     
     public static void editSalesInformation() {
         Scanner sc = new Scanner(System.in);
-        System.out.println("\n=== Edit Sales Information ===");
-        System.out.println();
+        System.out.println("=== Edit Sales Information ===");
 
         // 1. INPUTS
         System.out.print("Enter Transaction Date: ");
         String searchDate = sc.nextLine().trim();
-        System.out.println(); 
 
         System.out.print("Enter Customer Name: ");
         String searchName = sc.nextLine().trim();
@@ -94,8 +96,7 @@ class edit_information {
         SaleRecord foundRecord = null;
         for (SaleRecord sale : salesList) {
             // Check both Date and Name to be precise
-            if (sale.getDate().equalsIgnoreCase(searchDate) && 
-                sale.getCustomerName().equalsIgnoreCase(searchName)) {
+            if (sale.getDate().equalsIgnoreCase(searchDate) && sale.getCustomerName().equalsIgnoreCase(searchName)) {
                 foundRecord = sale;
                 break;
             }
@@ -104,27 +105,20 @@ class edit_information {
         // 3. DISPLAY & EDIT
         if (foundRecord != null) {
             System.out.println("Sales Record Found:");
-            System.out.println();
             
-            // Custom display format matching the PDF exactly
-            System.out.println("Model: " + foundRecord.getModelName() + " Quantity: " + foundRecord.getQuantity());
-            System.out.println();
+            // Custom display format 
+            System.out.println("Model: " + foundRecord.getModelName() + "   Quantity: " + foundRecord.getQuantity());
             System.out.println("Total: RM" + foundRecord.getTotalPrice());
-            System.out.println();
             System.out.println("Transaction Method: " + foundRecord.getPaymentMethod());
             System.out.println();
 
             System.out.println("Select number to edit:");
             System.out.println();
-            // Mimic the column layout roughly or just list them
-            System.out.println("1. Name    2. Model"); 
-            System.out.println("3. Quantity    4. Total");
+            System.out.println("1. Name    2. Model   3. Quantity    4. Total");
             System.out.println("5. Transaction Method"); 
-            System.out.println();
-
             System.out.print("> ");
             int choice = sc.nextInt();
-            sc.nextLine(); // Consume newline
+            System.out.println();
 
             // Variables to hold potential new values
             String newValue = "";
@@ -132,7 +126,6 @@ class edit_information {
             int newInt = 0;
 
             // 4. HANDLING USER CHOICE
-            // Note: I corrected the logic. Choice 5 = Method.
             switch (choice) {
                 case 1:
                     System.out.print("Enter New Customer Name: ");
@@ -162,12 +155,10 @@ class edit_information {
             }
 
             // 5. CONFIRMATION
-            System.out.println();
             System.out.print("Confirm Update? (Y/N): ");
             String confirm = sc.nextLine();
 
             if (confirm.equalsIgnoreCase("Y")) {
-                // Apply the update
                 switch (choice) {
                     case 1: 
                         foundRecord.setCustomerName(newValue); 
@@ -199,4 +190,5 @@ class edit_information {
             System.out.println("Sales Record Not Found.");
         }
     }
+
 }
