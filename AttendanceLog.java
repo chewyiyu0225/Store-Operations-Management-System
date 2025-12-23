@@ -1,25 +1,25 @@
 package fop;
 
 public class AttendanceLog {
-    String inputdate,inputtime,inputemployeeID,inputaction;
+    String date,time,employeeID,action;
 
     public AttendanceLog(String date, String time, String employeeID, String action) {
-        inputdate = date;
-        inputtime = time;
-        inputemployeeID = employeeID;
-        inputaction = action;
+        this.date = date;
+        this.time = time;
+        this.employeeID = employeeID;
+        this.action = action;
     }
 
-    public String getDate() { return inputdate; }
-    public String getTime() { return inputtime; }
-    public String getEmployeeID() { return inputemployeeID; }
-    public String getAction() { return inputaction; }
+    public String getDate() { return date; }
+    public String getTime() { return time; }
+    public String getEmployeeID() { return employeeID; }
+    public String getAction() { return action; }
 
     public String toCSV() {
-        return inputdate + "," + inputtime + "," + inputemployeeID + "," + inputaction;
+        return date + "," + time + "," + employeeID + "," + action;
     }
 
     public String toString() {
-        return "[" + inputdate + " " + inputtime + "] " + inputemployeeID + " - " + inputaction;
+        return "[" + date + " " + time + "] " + employeeID + " - " + action;
     }
 }
