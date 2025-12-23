@@ -1,23 +1,23 @@
 package fop;
 
 public class WatchModel {
-    String modelName1;
-    double price1;
-    int quantity1;
+    String modelName;
+    double price;
+    int quantity;
 
     public WatchModel(String modelName, double price, int quantity) {
-        modelName1 = modelName;
-        price1 = price;
-        quantity1 = quantity;
+        this.modelName = modelName;
+        this.price = price;
+        this.quantity = quantity;
     }
 
     // Getters and Setters needed for "Edit Information" later
-    public String getModelName() { return modelName1; }
-    public double getPrice() { return price1; }
-    public void setPrice(double price) { price1 = price; }
-    public int getQuantity() { return quantity1; }
-    public void setQuantity(int quantity) { quantity1 = quantity; }
+    public String getModelName() { return modelName; }
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
+    public int getQuantity() { return quantity; }
+    public void setQuantity(int quantity) { this.quantity = quantity; }
 
-    public String toCSV() { return modelName1 + "," + price1 + "," + quantity1; }
-    public String toString() { return modelName1 + " | RM" + price1 + " | Qty: " + quantity1; }
+    public String toCSV() { return modelName + "," + price + "," + quantity; }
+    public String toString() { return modelName + " | RM" + price + " | Qty: " + quantity; }
 }
