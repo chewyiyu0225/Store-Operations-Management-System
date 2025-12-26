@@ -8,6 +8,6 @@ package fop.assignment.pkgfinal.version;
  *
  * @author lihon
  */
-public class data {
+public class Analytics {
     
 }
