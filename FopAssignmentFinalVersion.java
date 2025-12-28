@@ -264,7 +264,6 @@ public class FopAssignmentFinalVersion {
 
         while (addingItems) {
             System.out.print("-");
-            String modelInput = sc.nextLine();
             
             System.out.println("--- Enter Models (Type 'done' to finish) ---");
         while (true) {
@@ -617,3 +616,4 @@ public class FopAssignmentFinalVersion {
             System.out.println("Warning: No matching 'Clock In' record found for today.");    
             }
 }
+
